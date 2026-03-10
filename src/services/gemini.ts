@@ -45,11 +45,15 @@ export async function generateMedicalScript(
 - **结构**：【痛点引入】→【深度科普】→【误区纠正】→【行动建议】。
 
 ### 2. 视觉分镜要求（9个）：
-- **description (中文)**：极其生动、具有电影感的画面描述。不仅描述物体，还要描述**氛围、光影和情绪**（例如：阳光穿过指缝的温暖、显微镜下细胞跳动的生命感）。
-- **prompt (英文)**：高水准的 AI 绘图提示词。
-  - **风格统一**：Professional medical 3D rendering, Octane Render, 8k, cinematic lighting.
-  - **细节丰富**：包含构图（Extreme close-up, Bird's eye view）、光影（Volumetric lighting, Soft bokeh）、材质（Translucent skin, Metallic medical tools）。
-  - **情感化**：通过色彩和构图传达治愈、专业或警示的情绪。
+- **description (中文)**：极其生动、具有电影感的画面描述。不仅描述物体，还要描述氛围、光影和情绪。
+- **prompt (英文)**：必须结构化，严格按照以下格式输出：
+  - **Style (风格)**: e.g., Professional medical 3D rendering, Octane Render, 8k, cinematic lighting.
+  - **Scene (场景)**: e.g., Modern hospital room, microscopic view of cells.
+  - **Camera (镜头)**: e.g., Extreme close-up, Bird's eye view, Wide shot.
+  - **Emotion (情绪)**: e.g., Healing, Professional, Urgent, Calm.
+  - **Subject (主体)**: e.g., Doctor, Patient, DNA strand.
+  - **Action (主体动作)**: e.g., Examining, Pointing, Explaining.
+  (请将以上要素合并为一段连贯的英文提示词)
 
 请以 JSON 格式返回。`;
 
@@ -122,7 +126,7 @@ export async function generateStoryboardImage(prompt: string): Promise<string> {
   const ai = getGeminiClient();
   
   const response = await ai.models.generateContent({
-    model: 'gemini-3.1-flash-image-preview',
+    model: 'gemini-3.1-flash-image-preview', // 使用 Nano Banana 2
     contents: {
       parts: [{ text: `Medical illustration style, professional, clean, high quality: ${prompt}` }],
     },

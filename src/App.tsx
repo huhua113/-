@@ -243,40 +243,36 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5] text-[#1a1a1a] font-sans selection:bg-emerald-100">
+    <div className="min-h-screen bg-amber-50 text-zinc-800 font-sans selection:bg-pink-200">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-black/5 px-6 py-4">
+      <header className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b-2 border-amber-200 px-4 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-200">
-              <Video size={24} />
+            <div className="w-10 h-10 bg-amber-400 rounded-full flex items-center justify-center text-white shadow-md border-2 border-white">
+              <span className="text-xl">🐶</span>
             </div>
             <div>
-              <h1 className="text-xl font-semibold tracking-tight">医影科普助手</h1>
-              <p className="text-xs text-muted font-medium uppercase tracking-wider opacity-60">Medical Science Workflow</p>
+              <h1 className="text-lg font-bold tracking-tight text-amber-900">无穷科普</h1>
+              <p className="text-[10px] text-amber-700 font-medium uppercase tracking-wider opacity-70">Doodle Science</p>
             </div>
           </div>
           
-          <div className="flex items-center gap-4">
-            {/* 移除登录按钮，改为可选功能或直接隐藏 */}
+          <div className="flex items-center gap-2">
             {user && (
-              <div className="flex items-center gap-3 pl-4 border-l border-black/5">
-                <div className="text-right hidden sm:block">
-                  <p className="text-sm font-medium leading-none">{user.displayName || '用户'}</p>
-                </div>
+              <div className="flex items-center gap-2 pl-3 border-l-2 border-amber-200">
                 {user.photoURL ? (
-                  <img src={user.photoURL} alt="Avatar" className="w-9 h-9 rounded-full border border-black/5" />
+                  <img src={user.photoURL} alt="Avatar" className="w-8 h-8 rounded-full border-2 border-amber-200" />
                 ) : (
-                  <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
-                    <UserIcon size={18} />
+                  <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 border-2 border-pink-200">
+                    <UserIcon size={16} />
                   </div>
                 )}
                 <button 
                   onClick={handleLogout}
-                  className="p-2 text-muted hover:text-red-500 transition-colors"
+                  className="p-2 text-zinc-400 hover:text-red-500 transition-colors"
                   title="退出登录"
                 >
-                  <LogOut size={18} />
+                  <LogOut size={16} />
                 </button>
               </div>
             )}
@@ -284,61 +280,55 @@ function App() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-12">
+      <main className="max-w-7xl mx-auto px-4 py-8">
         <AnimatePresence mode="wait">
           {step === 'input' ? (
             <motion.div 
               key="input"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="max-w-2xl mx-auto text-center space-y-8"
+              exit={{ opacity: 0, y: -10 }}
+              className="max-w-xl mx-auto text-center space-y-6"
             >
-              <div className="space-y-4">
-                <h2 className="text-4xl font-light tracking-tight sm:text-5xl">
-                  让医学科普更具 <span className="text-emerald-600 font-medium">生命力</span>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-amber-900">
+                  让科普像 <span className="text-pink-500 font-black">毛蛋</span> 一样可爱
                 </h2>
-                <p className="text-lg text-muted max-w-lg mx-auto">
-                  输入医学主题，我们将为您检索权威文献，生成专业的科普文案与视觉分镜。
+                <p className="text-base text-zinc-600 max-w-sm mx-auto font-medium">
+                  输入主题，我将为您检索文献，生成科普文案及视觉分镜。
                 </p>
               </div>
 
               <form onSubmit={handleGenerate} className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000 group-hover:duration-200"></div>
-                <div className="relative flex items-center bg-white rounded-2xl shadow-xl overflow-hidden border border-black/5">
-                  <div className="pl-6 text-muted">
-                    <Search size={24} />
+                <div className="relative flex items-center bg-white rounded-full shadow-lg border-4 border-amber-200 overflow-hidden focus-within:ring-4 focus-within:ring-pink-200 transition-all">
+                  <div className="pl-4 text-amber-400">
+                    <Search size={20} />
                   </div>
                   <input 
                     type="text" 
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
-                    placeholder="例如：糖尿病患者的饮食误区、如何预防颈椎病..."
-                    className="flex-1 px-4 py-6 text-lg outline-none placeholder:text-muted/50"
+                    placeholder="例如：小狗为什么喜欢摇尾巴..."
+                    className="flex-1 px-3 py-5 text-base outline-none placeholder:text-zinc-400"
                     disabled={isLoading}
                   />
                   <button 
                     type="submit"
                     disabled={isLoading || !topic.trim()}
-                    className="mr-2 px-8 py-4 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 disabled:opacity-50 disabled:hover:bg-emerald-600 transition-all flex items-center gap-2"
+                    className="mr-1 px-6 py-3 bg-amber-400 text-white rounded-full font-bold hover:bg-amber-500 disabled:opacity-50 transition-all flex items-center gap-2 min-h-[44px] shadow-md"
                   >
-                    {isLoading ? <Loader2 className="animate-spin" size={20} /> : <ChevronRight size={20} />}
-                    <div className="flex flex-col items-start leading-none">
-                      <span>{isLoading ? '生成中...' : '开始生成'}</span>
-                      {isLoading && loadingStatus && (
-                        <span className="text-[10px] opacity-70 mt-1 font-normal">{loadingStatus}</span>
-                      )}
-                    </div>
+                    {isLoading ? <Loader2 className="animate-spin" size={18} /> : <ChevronRight size={18} />}
+                    <span className="hidden sm:inline">{isLoading ? '生成中...' : '生成'}</span>
                   </button>
                 </div>
               </form>
 
-              <div className="flex flex-wrap justify-center gap-3">
-                {['高血压防治', '流感季防护', '近视手术科普', '备孕指南'].map((tag) => (
+              <div className="flex flex-wrap justify-center gap-2">
+                {['高血压防治', '流感季防护', '近视手术', '备孕指南'].map((tag) => (
                   <button 
                     key={tag}
                     onClick={() => setTopic(tag)}
-                    className="px-4 py-2 bg-white border border-black/5 rounded-full text-sm text-muted hover:border-emerald-200 hover:text-emerald-600 transition-all"
+                    className="px-4 py-2 bg-white border-2 border-amber-200 rounded-full text-xs text-amber-800 font-bold hover:border-pink-300 hover:text-pink-600 transition-all shadow-sm"
                   >
                     {tag}
                   </button>
@@ -350,75 +340,54 @@ function App() {
               key="result"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+              className="grid grid-cols-1 lg:grid-cols-3 gap-6"
             >
               {/* Left Column: Script */}
-              <div className="lg:col-span-1 space-y-6">
-                <div className="bg-white rounded-3xl p-8 shadow-sm border border-black/5 sticky top-28">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-semibold flex items-center gap-2">
-                      <Video className="text-emerald-600" size={20} />
+              <div className="lg:col-span-1 space-y-4">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-zinc-200 lg:sticky lg:top-20">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <Video className="text-indigo-600" size={18} />
                       科普文案
                     </h3>
                     <button 
                       onClick={() => setStep('input')}
-                      className="p-2 hover:bg-gray-100 rounded-full transition-colors text-muted"
+                      className="p-2 hover:bg-zinc-100 rounded-full transition-colors text-zinc-500"
                     >
-                      <RotateCcw size={18} />
+                      <RotateCcw size={16} />
                     </button>
                   </div>
                   
-                  <div className="prose prose-emerald max-w-none text-muted leading-relaxed">
+                  <div className="prose prose-indigo max-w-none text-zinc-600 leading-relaxed text-sm">
                     <ReactMarkdown>{result?.script || ''}</ReactMarkdown>
                   </div>
-
-                  {result?.sources && result.sources.length > 0 && (
-                    <div className="mt-8 pt-6 border-t border-black/5">
-                      <h4 className="text-xs font-bold uppercase tracking-widest text-muted mb-4 opacity-60">参考来源</h4>
-                      <ul className="space-y-2">
-                        {result.sources.map((source, idx) => (
-                          <li key={idx} className="flex items-start gap-2 text-sm group">
-                            <ExternalLink size={14} className="mt-1 text-emerald-600 shrink-0" />
-                            <a 
-                              href={source.uri} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="hover:text-emerald-600 transition-colors line-clamp-1"
-                            >
-                              {source.title}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
                 </div>
               </div>
 
               {/* Right Column: Storyboards */}
-              <div className="lg:col-span-2 space-y-6">
+              <div className="lg:col-span-2 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-semibold flex items-center gap-2">
-                    <ImageIcon className="text-emerald-600" size={20} />
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <ImageIcon className="text-indigo-600" size={18} />
                     视觉分镜 (9)
                   </h3>
                   <button 
                     onClick={handleGenerateAllImages}
-                    className="px-4 py-2 bg-emerald-600 text-white rounded-full text-sm font-medium hover:bg-emerald-700 transition-all flex items-center gap-2 shadow-lg shadow-emerald-100"
+                    className="px-4 py-2 bg-indigo-600 text-white rounded-full text-xs font-medium hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-sm min-h-[40px]"
                   >
                     <Play size={14} />
-                    <span>一键生成所有图片</span>
+                    <span>一键生成</span>
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {result?.storyboards.map((sb) => (
                     <motion.div 
                       key={sb.id}
                       layout
-                      className="bg-white rounded-3xl overflow-hidden border border-black/5 shadow-sm group hover:shadow-md transition-all"
+                      className="bg-white rounded-2xl overflow-hidden border border-zinc-200 shadow-sm group hover:shadow-md transition-all"
                     >
-                      <div className="aspect-video bg-muted relative overflow-hidden">
+                      <div className="aspect-video bg-zinc-100 relative overflow-hidden">
                         {sb.imageUrl ? (
                           <img 
                             src={sb.imageUrl} 
@@ -427,31 +396,47 @@ function App() {
                             referrerPolicy="no-referrer"
                           />
                         ) : (
-                          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
                             {sb.isGenerating ? (
-                              <div className="flex flex-col items-center gap-3">
-                                <Loader2 className="animate-spin text-emerald-600" size={32} />
-                                <p className="text-sm text-muted font-medium">AI 正在绘制中...</p>
+                              <div className="flex flex-col items-center gap-2">
+                                <Loader2 className="animate-spin text-indigo-600" size={24} />
+                                <p className="text-xs text-zinc-500 font-medium">AI 绘制中...</p>
                               </div>
                             ) : (
                               <button 
                                 onClick={() => handleGenerateImage(sb.id)}
-                                className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-emerald-600 hover:scale-110 transition-transform"
+                                className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-600 hover:scale-105 transition-transform"
                               >
-                                <ImageIcon size={24} />
+                                <ImageIcon size={18} />
                               </button>
                             )}
                           </div>
                         )}
-                        <div className="absolute top-4 left-4 w-8 h-8 rounded-full bg-black/50 backdrop-blur-md text-white flex items-center justify-center text-xs font-bold">
+                        <div className="absolute top-2 left-2 w-6 h-6 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center text-[10px] font-bold">
                           {sb.id}
                         </div>
                       </div>
-                      <div className="p-6 space-y-3">
-                        <p className="text-sm font-medium leading-relaxed">{sb.description}</p>
-                        <p className="text-xs text-muted italic line-clamp-2 opacity-60 group-hover:opacity-100 transition-opacity">
-                          Prompt: {sb.prompt}
-                        </p>
+                      <div className="p-4 space-y-2">
+                        <textarea 
+                          value={sb.description}
+                          onChange={(e) => {
+                            const newResult = { ...result! };
+                            newResult.storyboards[newResult.storyboards.findIndex(s => s.id === sb.id)].description = e.target.value;
+                            setResult(newResult);
+                          }}
+                          className="w-full text-xs font-medium leading-relaxed bg-transparent border-none focus:ring-0 resize-none text-zinc-800"
+                          rows={2}
+                        />
+                        <textarea 
+                          value={sb.prompt}
+                          onChange={(e) => {
+                            const newResult = { ...result! };
+                            newResult.storyboards[newResult.storyboards.findIndex(s => s.id === sb.id)].prompt = e.target.value;
+                            setResult(newResult);
+                          }}
+                          className="w-full text-[10px] text-zinc-500 italic opacity-70 hover:opacity-100 transition-opacity bg-transparent border-none focus:ring-0 resize-none"
+                          rows={2}
+                        />
                       </div>
                     </motion.div>
                   ))}
@@ -479,11 +464,6 @@ function App() {
       </AnimatePresence>
 
       {/* Footer */}
-      <footer className="max-w-7xl mx-auto px-6 py-12 border-t border-black/5 text-center">
-        <p className="text-sm text-muted">
-          &copy; {new Date().getFullYear()} 医影科普助手 &middot; 基于 Google Gemini 驱动
-        </p>
-      </footer>
     </div>
   );
 }

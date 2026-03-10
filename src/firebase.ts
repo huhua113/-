@@ -1,17 +1,22 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, User } from 'firebase/auth';
 import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
-import localFirebaseConfig from '../firebase-applet-config.json';
+
+// 安全地加载本地配置文件（仅用于 AI Studio 预览或本地开发）
+// 使用 import.meta.glob 确保在文件不存在时（如在 Netlify 部署中）不会导致编译错误
+const configs = import.meta.glob('../firebase-applet-config.json', { eager: true });
+const localConfig: any = configs['../firebase-applet-config.json'] || {};
+const finalLocalConfig = localConfig.default || localConfig;
 
 // 优先使用环境变量，如果没有则回退到本地配置文件
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || localFirebaseConfig.apiKey,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || localFirebaseConfig.authDomain,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || localFirebaseConfig.projectId,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || localFirebaseConfig.storageBucket,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || localFirebaseConfig.messagingSenderId,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || localFirebaseConfig.appId,
-  firestoreDatabaseId: import.meta.env.VITE_FIREBASE_DATABASE_ID || localFirebaseConfig.firestoreDatabaseId
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || finalLocalConfig.apiKey,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || finalLocalConfig.authDomain,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || finalLocalConfig.projectId,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || finalLocalConfig.storageBucket,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || finalLocalConfig.messagingSenderId,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || finalLocalConfig.appId,
+  firestoreDatabaseId: import.meta.env.VITE_FIREBASE_DATABASE_ID || finalLocalConfig.firestoreDatabaseId
 };
 
 // Initialize Firebase

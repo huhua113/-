@@ -105,8 +105,8 @@ export async function generateMedicalScript(
 
 // 生成分镜图片
 export async function generateStoryboardImage(prompt: string): Promise<string> {
-  // 必须重新创建实例以使用用户选择的 API Key
-  const ai = getGeminiClient(process.env.API_KEY);
+  // 优先使用 getGeminiClient 的默认逻辑（包含环境变量检查）
+  const ai = getGeminiClient();
   
   const response = await ai.models.generateContent({
     model: 'gemini-3.1-flash-image-preview',

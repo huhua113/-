@@ -131,10 +131,7 @@ export async function generateStoryboardImage(prompt: string): Promise<string> {
       parts: [{ text: `Medical illustration style, professional, clean, high quality: ${prompt}` }],
     },
     config: {
-      imageConfig: {
-        aspectRatio: "9:16",
-        imageSize: "1K"
-      }
+      // imageConfig removed to fix potential generation issue
     }
   });
 

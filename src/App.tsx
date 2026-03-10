@@ -229,6 +229,7 @@ function App() {
   };
 
   const handleGenerateAllImages = async () => {
+    console.log(">>> [App] handleGenerateAllImages clicked");
     if (!hasApiKey) {
       await handleOpenKeySelector();
       return;
@@ -385,7 +386,10 @@ function App() {
                       复制全部提示词
                     </button>
                     <button 
-                      onClick={handleGenerateAllImages}
+                      onClick={() => {
+                        console.log(">>> [App] Button clicked directly");
+                        handleGenerateAllImages();
+                      }}
                       className="px-4 py-2 bg-indigo-600 text-white rounded-full text-xs font-medium hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-sm min-h-[40px]"
                     >
                       <Play size={14} />

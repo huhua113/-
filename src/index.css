@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-muted: #71717a;
+  --color-muted-foreground: #71717a;
+}
+
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+/* Custom Prose-like styles for Markdown */
+.prose h1 { @apply text-2xl font-bold mb-4 mt-6 text-emerald-700; }
+.prose h2 { @apply text-xl font-bold mb-3 mt-5 text-emerald-600; }
+.prose h3 { @apply text-lg font-bold mb-2 mt-4 text-emerald-500; }
+.prose p { @apply mb-4 leading-relaxed; }
+.prose ul { @apply list-disc pl-5 mb-4; }
+.prose ol { @apply list-decimal pl-5 mb-4; }
+.prose li { @apply mb-1; }
+.prose strong { @apply font-bold text-[#1a1a1a]; }
+.prose blockquote { @apply border-l-4 border-emerald-200 pl-4 italic my-4 text-muted; }

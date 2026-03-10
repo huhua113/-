@@ -1,0 +1,57 @@
+{
+  "entities": {
+    "MedicalScript": {
+      "title": "Medical Script",
+      "description": "A generated medical科普 script with storyboards",
+      "type": "object",
+      "properties": {
+        "topic": {
+          "type": "string",
+          "description": "The topic of the medical script"
+        },
+        "script": {
+          "type": "string",
+          "description": "The full text of the script"
+        },
+        "storyboards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "description": { "type": "string" },
+              "prompt": { "type": "string" },
+              "imageUrl": { "type": "string" }
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "uri": { "type": "string" },
+              "title": { "type": "string" }
+            }
+          }
+        },
+        "uid": {
+          "type": "string",
+          "description": "The user ID who generated this script"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the script was created"
+        }
+      },
+      "required": ["topic", "script", "storyboards", "uid", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/scripts/{scriptId}": {
+      "schema": "MedicalScript",
+      "description": "Collection of generated medical scripts"
+    }
+  }
+}

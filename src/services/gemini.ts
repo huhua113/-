@@ -132,7 +132,7 @@ export async function generateStoryboardImage(prompt: string): Promise<string> {
     },
     config: {
       imageConfig: {
-        aspectRatio: "16:9",
+        aspectRatio: "9:16",
         imageSize: "1K"
       }
     }

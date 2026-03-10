@@ -371,13 +371,27 @@ function App() {
                     <ImageIcon className="text-indigo-600" size={18} />
                     视觉分镜 (9)
                   </h3>
-                  <button 
-                    onClick={handleGenerateAllImages}
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-full text-xs font-medium hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-sm min-h-[40px]"
-                  >
-                    <Play size={14} />
-                    <span>一键生成</span>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button 
+                      onClick={() => {
+                        const allPrompts = result?.storyboards.map(s => s.prompt).join('\n\n');
+                        if (allPrompts) {
+                          navigator.clipboard.writeText(allPrompts);
+                          alert('提示词已复制到剪贴板');
+                        }
+                      }}
+                      className="px-3 py-1.5 bg-amber-100 text-amber-800 rounded-full text-[10px] font-bold hover:bg-amber-200 transition-colors"
+                    >
+                      复制全部提示词
+                    </button>
+                    <button 
+                      onClick={handleGenerateAllImages}
+                      className="px-4 py-2 bg-indigo-600 text-white rounded-full text-xs font-medium hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-sm min-h-[40px]"
+                    >
+                      <Play size={14} />
+                      <span>一键生成</span>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

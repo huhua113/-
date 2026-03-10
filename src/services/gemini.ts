@@ -128,7 +128,7 @@ export async function generateStoryboardImage(prompt: string): Promise<string> {
   const response = await ai.models.generateContent({
     model: 'gemini-3.1-flash-image-preview', // 使用 Nano Banana 2
     contents: {
-      parts: [{ text: `Medical illustration style, professional, clean, high quality: ${prompt}` }],
+      parts: [{ text: `Medical illustration style, professional, clean, high quality, 9:16 aspect ratio: ${prompt}` }],
     },
     config: {
       // imageConfig removed to fix potential generation issue

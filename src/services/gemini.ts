@@ -4,8 +4,14 @@ import { GoogleGenAI, Type, GenerateContentResponse } from "@google/genai";
 // 注意：对于需要用户选择 Key 的模型（如 gemini-3.1-flash-image-preview），
 // 必须在调用前动态创建实例以确保使用最新的 Key。
 export const getGeminiClient = (apiKey?: string) => {
-  const key = apiKey || import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
-  return new GoogleGenAI({ apiKey: key });
+  const key = apiKey || 
+              (import.meta.env.VITE_GEMINI_API_KEY && import.meta.env.VITE_GEMINI_API_KEY.trim() !== "" ? import.meta.env.VITE_GEMINI_API_KEY : undefined) || 
+              process.env.GEMINI_API_KEY;
+  
+  if (!key) {
+    console.warn(">>> [Gemini] 未找到 API Key，可能会导致请求失败。");
+  }
+  return new GoogleGenAI({ apiKey: key || "" });
 };
 
 export interface Storyboard {
@@ -50,6 +56,7 @@ export async function generateMedicalScript(
   console.log("正在请求 Gemini 生成文案，主题:", topic);
 
   try {
+    console.log(">>> [Gemini] 正在调用 generateContent...");
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: prompt,
@@ -77,13 +84,19 @@ export async function generateMedicalScript(
       }
     });
 
+    console.log(">>> [Gemini] 收到响应:", response);
+
+    const rawText = response.text;
+    if (!rawText) {
+      throw new Error("模型返回了空响应");
+    }
+
     // 清洗可能的 Markdown 标记并解析
-    const rawText = response.text || "{}";
     const cleanJson = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
     const data = JSON.parse(cleanJson);
-    console.log("文案生成成功:", data);
+    console.log(">>> [Gemini] 解析成功:", data);
 
-    onProgress?.('正在规划视觉分镜与绘图指令...');
+    onProgress?.('正在整理分镜与参考资料...');
     const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks
       ?.filter(chunk => chunk.web)
       .map(chunk => ({ uri: chunk.web!.uri, title: chunk.web!.title || "参考来源" }));
@@ -97,8 +110,8 @@ export async function generateMedicalScript(
       })),
       sources
     };
-  } catch (error) {
-    console.error("Gemini API 调用失败:", error);
+  } catch (error: any) {
+    console.error(">>> [Gemini] 生成失败:", error);
     throw error;
   }
 }

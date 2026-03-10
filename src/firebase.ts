@@ -77,19 +77,19 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
   throw new Error(JSON.stringify(errInfo));
 }
 
-// Test connection to Firestore
-async function testConnection() {
-  try {
-    await getDocFromServer(doc(db, 'test', 'connection'));
-    console.log("Firestore connection successful");
-  } catch (error) {
-    if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.error("Please check your Firebase configuration. The client is offline.");
-    }
-  }
-}
+// Test connection to Firestore (Optional)
+// async function testConnection() {
+//   try {
+//     await getDocFromServer(doc(db, 'test', 'connection'));
+//     console.log("Firestore connection successful");
+//   } catch (error) {
+//     if (error instanceof Error && error.message.includes('the client is offline')) {
+//       console.error("Please check your Firebase configuration. The client is offline.");
+//     }
+//   }
+// }
 
-testConnection();
+// testConnection();
 
 export { signInWithPopup, onAuthStateChanged };
 export type { User };

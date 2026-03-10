@@ -25,7 +25,7 @@ import {
   Storyboard, 
   GenerationResult 
 } from './services/gemini';
-import { auth, db, googleProvider, signInWithPopup, onAuthStateChanged, User, handleFirestoreError, OperationType } from './firebase';
+import { auth, db, googleProvider, signInWithPopup, onAuthStateChanged, User } from './firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 // Error Boundary Component
@@ -139,10 +139,9 @@ function App() {
 
     console.log(">>> 开始生成流程，主题:", topic);
     
-    // 如果没有 API Key，先引导选择
-    if (!hasApiKey && !process.env.GEMINI_API_KEY) {
+    // 如果没有 API Key，先引导选择 (仅在本地或没有环境变量时)
+    if (!hasApiKey && !process.env.GEMINI_API_KEY && !import.meta.env.VITE_GEMINI_API_KEY) {
       await handleOpenKeySelector();
-      // 检查是否成功选择了 Key
       const hasKey = await window.aistudio.hasSelectedApiKey();
       if (!hasKey) return;
     }
@@ -152,16 +151,16 @@ function App() {
     setLoadingStatus('初始化医学科普工作流...');
     
     try {
+      // 1. 生成文案
       const data = await generateMedicalScript(topic, (status) => {
         setLoadingStatus(status);
       });
       console.log(">>> 生成成功:", data);
 
-      // 保存到 Firestore
+      // 2. 尝试保存到 Firestore (可选，不影响主流程)
       if (user) {
-        setLoadingStatus('正在保存到云端...');
-        const path = 'scripts';
         try {
+          const path = 'scripts';
           await addDoc(collection(db, path), {
             topic,
             script: data.script,
@@ -171,15 +170,27 @@ function App() {
             createdAt: serverTimestamp()
           });
         } catch (fsErr) {
-          handleFirestoreError(fsErr, OperationType.CREATE, path);
+          console.warn("保存到 Firestore 失败 (静默失败):", fsErr);
         }
       }
 
       setResult(data);
       setStep('result');
     } catch (err: any) {
-      console.error("前端捕获错误:", err);
-      setError(`生成失败: ${err.message || '未知错误'}。请检查控制台或 API Key 配置。`);
+      console.error("生成过程出错:", err);
+      let errorMessage = "生成失败，请稍后重试。";
+      
+      if (err.message?.includes("API_KEY_INVALID")) {
+        errorMessage = "API Key 无效，请检查配置。";
+      } else if (err.message?.includes("SAFETY")) {
+        errorMessage = "生成内容触发了安全过滤，请尝试更换主题。";
+      } else if (err.message?.includes("quota")) {
+        errorMessage = "API 配额已耗尽，请稍后再试。";
+      } else {
+        errorMessage = `生成出错: ${err.message || '未知错误'}`;
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -247,21 +258,11 @@ function App() {
           </div>
           
           <div className="flex items-center gap-4">
-            {!hasApiKey && (
-              <button 
-                onClick={handleOpenKeySelector}
-                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-full text-sm font-medium border border-amber-200 hover:bg-amber-100 transition-colors"
-              >
-                <Key size={16} />
-                <span>配置绘图 Key</span>
-              </button>
-            )}
-
-            {user ? (
+            {/* 移除登录按钮，改为可选功能或直接隐藏 */}
+            {user && (
               <div className="flex items-center gap-3 pl-4 border-l border-black/5">
                 <div className="text-right hidden sm:block">
                   <p className="text-sm font-medium leading-none">{user.displayName || '用户'}</p>
-                  <p className="text-[10px] text-muted mt-1">{user.email}</p>
                 </div>
                 {user.photoURL ? (
                   <img src={user.photoURL} alt="Avatar" className="w-9 h-9 rounded-full border border-black/5" />
@@ -278,14 +279,6 @@ function App() {
                   <LogOut size={18} />
                 </button>
               </div>
-            ) : (
-              <button 
-                onClick={handleLogin}
-                className="flex items-center gap-2 px-6 py-2 bg-black text-white rounded-full text-sm font-medium hover:bg-black/80 transition-all"
-              >
-                <LogIn size={16} />
-                <span>登录</span>
-              </button>
             )}
           </div>
         </div>

@@ -390,7 +390,7 @@ function App() {
                         console.log(">>> [App] Button clicked directly");
                         handleGenerateAllImages();
                       }}
-                      className="px-4 py-2 bg-indigo-600 text-white rounded-full text-xs font-medium hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-sm min-h-[40px]"
+                      className="px-4 py-2 bg-indigo-600 text-white rounded-full text-xs font-medium hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-sm min-h-[40px] relative z-50"
                     >
                       <Play size={14} />
                       <span>一键生成</span>

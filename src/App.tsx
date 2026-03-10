@@ -243,7 +243,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 text-zinc-800 font-sans selection:bg-pink-200">
+    <div className="min-h-screen bg-[url('https://i.imgur.com/h07BKFv.jpeg')] bg-cover bg-center bg-fixed text-zinc-800 font-sans selection:bg-pink-200">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b-2 border-amber-200 px-4 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">

@@ -4,7 +4,7 @@ export async function generateDoubaoImage(prompt: string): Promise<string> {
     throw new Error("未配置豆包 API Key");
   }
 
-  // 这是一个示例端点，请根据实际的豆包/火山引擎 API 文档进行调整
+  console.log(">>> [Doubao] 正在调用 API，Prompt:", prompt);
   const response = await fetch("https://api.volcengine.com/v1/images/generations", {
     method: "POST",
     headers: {
@@ -18,11 +18,12 @@ export async function generateDoubaoImage(prompt: string): Promise<string> {
     }),
   });
 
-  if (!response.ok) {
-    throw new Error(`豆包 API 请求失败: ${response.statusText}`);
-  }
-
   const data = await response.json();
+  console.log(">>> [Doubao] 收到响应:", data);
+
+  if (!response.ok) {
+    throw new Error(`豆包 API 请求失败: ${response.statusText}, 详情: ${JSON.stringify(data)}`);
+  }
   // 假设返回结构为 { data: [{ url: "..." }] }
   if (data.data && data.data[0] && data.data[0].url) {
     return data.data[0].url;

@@ -21,10 +21,10 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { 
   generateMedicalScript, 
-  generateStoryboardImage, 
   Storyboard, 
   GenerationResult 
 } from './services/gemini';
+import { generateDoubaoImage } from './services/doubaoService';
 import { auth, db, googleProvider, signInWithPopup, onAuthStateChanged, User } from './firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
@@ -212,7 +212,7 @@ function App() {
     setResult({ ...result, storyboards: newStoryboards });
 
     try {
-      const imageUrl = await generateStoryboardImage(newStoryboards[index].prompt);
+      const imageUrl = await generateDoubaoImage(newStoryboards[index].prompt);
       newStoryboards[index].imageUrl = imageUrl;
     } catch (err: any) {
       console.error(err);

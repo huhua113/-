@@ -120,26 +120,3 @@ export async function generateMedicalScript(
   }
 }
 
-// 生成分镜图片
-export async function generateStoryboardImage(prompt: string): Promise<string> {
-  // 优先使用 getGeminiClient 的默认逻辑（包含环境变量检查）
-  const ai = getGeminiClient();
-  
-  const response = await ai.models.generateContent({
-    model: 'gemini-3.1-flash-image-preview', // 使用 Nano Banana 2
-    contents: {
-      parts: [{ text: `Medical illustration style, professional, clean, high quality, 9:16 aspect ratio: ${prompt}` }],
-    },
-    config: {
-      // imageConfig removed to fix potential generation issue
-    }
-  });
-
-  for (const part of response.candidates?.[0]?.content?.parts || []) {
-    if (part.inlineData) {
-      return `data:image/png;base64,${part.inlineData.data}`;
-    }
-  }
-  
-  throw new Error("未能生成图片");
-}

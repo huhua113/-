@@ -419,7 +419,7 @@ function App() {
                             ) : (
                               <button 
                                 onClick={() => handleGenerateImage(sb.id)}
-                                className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-600 hover:scale-105 transition-transform"
+                                className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-600 hover:scale-105 transition-transform z-20 relative"
                               >
                                 <ImageIcon size={18} />
                               </button>

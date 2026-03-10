@@ -12,7 +12,7 @@ export async function generateDoubaoImage(prompt: string): Promise<string> {
       "Authorization": `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: "doubao-image-model", // 请替换为实际的模型名称
+      model: "gemini-2.5-flash-image", // 已改回 nano banana 模型
       prompt: `Medical illustration style, professional, clean, high quality, 9:16 aspect ratio: ${prompt}`,
       size: "1024x1792", // 9:16 比例
     }),

@@ -230,17 +230,28 @@ function App() {
 
   const handleGenerateAllImages = async () => {
     console.log(">>> [App] handleGenerateAllImages clicked");
+    console.log(">>> [App] hasApiKey:", hasApiKey);
+    console.log(">>> [App] result exists:", !!result);
+    
     if (!hasApiKey) {
+      console.log(">>> [App] No API Key, opening selector");
       await handleOpenKeySelector();
       return;
     }
-    if (!result) return;
+    if (!result) {
+      console.log(">>> [App] No result, returning");
+      return;
+    }
 
+    console.log(">>> [App] Starting loop over", result.storyboards.length, "storyboards");
     for (const sb of result.storyboards) {
+      console.log(">>> [App] Checking storyboard:", sb.id, "imageUrl:", sb.imageUrl);
       if (!sb.imageUrl) {
+        console.log(">>> [App] Generating image for:", sb.id);
         await handleGenerateImage(sb.id);
       }
     }
+    console.log(">>> [App] Finished loop");
   };
 
   return (
